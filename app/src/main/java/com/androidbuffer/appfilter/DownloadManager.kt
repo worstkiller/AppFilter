@@ -1,10 +1,19 @@
 package com.androidbuffer.appfilter
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.AsyncTask
+import android.os.Environment
+import android.os.Handler
 import android.os.PatternMatcher
 import android.util.Log
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import java.io.BufferedInputStream
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 import java.net.URL
 import java.net.UnknownHostException
@@ -22,6 +31,27 @@ class DownloadManager {
             val url = END_POINT.format(packageName)
             Log.e("TAG++", url)
             DownLoadAsync(listener).execute(url)
+        }
+
+        fun saveImageToFolder(context: Context, name: String?, imageUrl: String?, listener: OnSaveFileListener) {
+            Picasso.with(context).load(imageUrl).into(object : Target{
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+                }
+
+                override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+                }
+
+                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    Handler().post({
+                        val parentFolder = File(Environment.getDataDirectory(),context.getString(R.string.app_name))
+                        if (!parentFolder.exists()){
+                            parentFolder.mkdir()
+                        }
+                    })
+                }
+            })
         }
     }
 
@@ -66,6 +96,10 @@ class DownloadManager {
             super.onPostExecute(result)
             listener.onResponse(result)
         }
+    }
+
+    interface OnSaveFileListener {
+        fun onSave(uri: Uri)
     }
 
     interface OnResponseFromPlay {

@@ -20,19 +20,23 @@ class AppRequestAdapter(listOfItems: ArrayList<AppModel>, OnItemListener: OnClic
     val listener = OnItemListener
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val model = listModels.get(position)
+        val model = listModels[position]
         holder?.tvName?.text = model.name
-        Picasso.with(holder?.itemView?.context).load(model.iconUrl).placeholder(R.drawable.ic_android_placeholder).into(holder?.ivAppIcon,object :Callback{
+        Picasso.with(holder?.itemView?.context).load(model.iconUrl).placeholder(R.drawable.ic_android_placeholder).into(holder?.ivAppIcon, object : Callback {
             override fun onSuccess() {
-                Log.d("TAG++","Picasso : success")
+                holder?.ivStatus?.visibility = View.VISIBLE
+                holder?.ivStatus?.setImageResource(R.drawable.ic_success)
+                Log.d("TAG++", "Picasso : success")
             }
 
             override fun onError() {
-               Log.d("TAG++","Picasso : failed")
+                holder?.ivStatus?.visibility = View.VISIBLE
+                holder?.ivStatus?.setImageResource(R.drawable.ic_failure)
+                Log.d("TAG++", "Picasso : failed")
             }
         })
         if (holder?.pbLoader?.visibility == View.VISIBLE && model.iconUrl != null) {
-            holder?.pbLoader.visibility = View.GONE
+            holder.pbLoader.visibility = View.GONE
         } else {
             holder?.pbLoader?.visibility = View.GONE
         }
@@ -50,15 +54,19 @@ class AppRequestAdapter(listOfItems: ArrayList<AppModel>, OnItemListener: OnClic
 
     inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         init {
-            itemView?.setOnClickListener(View.OnClickListener {
+            itemView?.setOnClickListener({
                 listener.onItemClick(adapterPosition)
-                pbLoader?.visibility = View.VISIBLE
+                if (listModels[adapterPosition].iconUrl == null) {
+                    ivStatus?.visibility = View.GONE
+                    pbLoader?.visibility = View.VISIBLE
+                }
             })
         }
 
         val tvName = itemView?.findViewById<TextView>(R.id.tvName)
         val ivAppIcon = itemView?.findViewById<ImageView>(R.id.ivAppIcon)
         val pbLoader = itemView?.findViewById<ProgressBar>(R.id.pbLoader)
+        val ivStatus = itemView?.findViewById<ImageView>(R.id.ivStatus)
     }
 
     interface OnClickItem {

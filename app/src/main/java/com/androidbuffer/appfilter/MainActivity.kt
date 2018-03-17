@@ -4,8 +4,12 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -18,6 +22,8 @@ import android.widget.Toast
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
 
@@ -132,6 +138,11 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
         DownloadManager.getImage(listOfItems.get(position).packageName, object : DownloadManager.OnResponseFromPlay {
             override fun onResponse(imageUrl: String?) {
                 Log.e("TAG++", ": Url = ${imageUrl}")
+                DownloadManager.saveImageToFolder(this@MainActivity, listOfItems[position].name, imageUrl, object : DownloadManager.OnSaveFileListener {
+                    override fun onSave(uri: Uri) {
+
+                    }
+                })
                 listOfItems.get(position).iconUrl = imageUrl
                 appAdapter?.notifyItemChanged(position)
             }
