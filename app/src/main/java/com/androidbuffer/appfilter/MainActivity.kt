@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
 
     private fun initViews() {
         rvAppRequestList = findViewById(R.id.rvAppRequestList)
-        appAdapter = AppRequestAdapter(listOfItems,this)
-        rvAppRequestList.layoutManager=LinearLayoutManager(this)
+        appAdapter = AppRequestAdapter(listOfItems, this)
+        rvAppRequestList.layoutManager = LinearLayoutManager(this)
         rvAppRequestList.adapter = appAdapter
     }
 
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
         }
     }
 
-    private fun getParsedXmlList(`in`: InputStream):  ArrayList<AppModel> {
+    private fun getParsedXmlList(`in`: InputStream): ArrayList<AppModel> {
         var listOfItems = ArrayList<AppModel>()
         try {
             val parser = Xml.newPullParser()
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
                         val packageName = title.substring(title.indexOf("{") + 1, title.indexOf("/"))
                         val modelItem = AppModel(name, null, packageName)
                         listOfItems.add(modelItem)
-                        Log.e("TAG++", packageName + "\n" + title)
+                        Log.e("TAG++", ": PackageName = ${packageName}")
                     }
                 }
                 parser.next()
@@ -129,6 +129,12 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
     }
 
     override fun onItemClick(position: Int) {
-        DownloadManager.getImage(listOfItems.get(position).packageName)
+        DownloadManager.getImage(listOfItems.get(position).packageName, object : DownloadManager.OnResponseFromPlay {
+            override fun onResponse(imageUrl: String?) {
+                Log.e("TAG++", ": Url = ${imageUrl}")
+                listOfItems.get(position).iconUrl = imageUrl
+                appAdapter?.notifyItemChanged(position)
+            }
+        })
     }
 }

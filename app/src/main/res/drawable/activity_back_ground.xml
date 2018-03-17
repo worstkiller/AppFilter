@@ -9,7 +9,7 @@
 
     <item android:left="-600dp" android:right="-50dp" android:top="-400dp">
         <shape android:shape="oval">
-            <solid android:color="@color/colorFlowralWhite"/>
+            <solid android:color="@color/white"/>
         </shape>
     </item>
 

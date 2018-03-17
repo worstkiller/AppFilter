@@ -4,6 +4,7 @@
     android:layout_margin="8dp"
     android:elevation="8dp"
     app:cardCornerRadius="4dp"
+    app:cardBackgroundColor="@color/colorFlowralWhite"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -26,6 +27,15 @@
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <ProgressBar
+            android:id="@+id/pbLoader"
+            android:visibility="gone"
+            android:layout_margin="8dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
 
     </RelativeLayout>
 
