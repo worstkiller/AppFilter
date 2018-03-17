@@ -1,12 +1,14 @@
 package com.androidbuffer.appfilter
 
 import android.os.AsyncTask
+import android.os.PatternMatcher
 import android.util.Log
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 import java.net.UnknownHostException
+import java.util.regex.Pattern
 import javax.net.ssl.HttpsURLConnection
 
 /**
@@ -44,12 +46,20 @@ class DownloadManager {
 
         fun getDownloadUrl(response: String?): String? {
             if (response != null) {
-                var result = response.substring(response.lastIndexOf(START_INDEX_PATTERN), response.lastIndexOf(END_INDEX_PATTERN))
-                result = result.replace(START_INDEX_PATTERN, "") + REQUIRED_IMAGE_SIZE
-                return URL_PROTOCOL + result
+                val patternMatcher = Pattern.compile(PATTERN_CODE)
+                val matcher = patternMatcher.matcher(response)
+                if (matcher.find()) {
+                    var matchedResponse = matcher.group()
+                    matchedResponse = matchedResponse.replace(START_INDEX_PATTERN, "")
+                            .replace(END_INDEX_PATTERN, REQUIRED_IMAGE_SIZE)
+                            .replace(END_PATTERN, "")
+                            .trim()
+                    return URL_PROTOCOL + matchedResponse
+                }
             } else {
                 return null
             }
+            return null
         }
 
         override fun onPostExecute(result: String?) {
