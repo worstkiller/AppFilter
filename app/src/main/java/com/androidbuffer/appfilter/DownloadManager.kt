@@ -2,6 +2,7 @@ package com.androidbuffer.appfilter
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.AsyncTask
@@ -11,10 +12,7 @@ import android.os.PatternMatcher
 import android.util.Log
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
+import java.io.*
 import java.net.URL
 import java.net.UnknownHostException
 import java.util.regex.Pattern
@@ -34,22 +32,33 @@ class DownloadManager {
         }
 
         fun saveImageToFolder(context: Context, name: String?, imageUrl: String?, listener: OnSaveFileListener) {
-            Picasso.with(context).load(imageUrl).into(object : Target{
+            Picasso.with(context).load(imageUrl).into(object : Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
+                    Log.d("TAG++", "Picasso: onPreparedLoad")
                 }
 
                 override fun onBitmapFailed(errorDrawable: Drawable?) {
-
+                    Log.d("TAG++", "Picasso: onBitmapFailed")
                 }
 
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                     Handler().post({
-                        val parentFolder = File(Environment.getDataDirectory(),context.getString(R.string.app_name))
-                        if (!parentFolder.exists()){
-                            parentFolder.mkdir()
+                        val parentFolder = File(Environment.getExternalStorageDirectory().path.plus("/").plus(context.getString(R.string.app_name)))
+                        if (!parentFolder.exists()) {
+                            parentFolder.mkdirs()
                         }
+                        val newImageFile = File(parentFolder, name?.plus(".png"))
+                        if (!newImageFile.exists()) {
+                            newImageFile.createNewFile()
+                        }
+                        val outStream = FileOutputStream(newImageFile)
+                        bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outStream)
+                        outStream.flush()
+                        outStream.close()
+                        listener.onSave(newImageFile.path)
+                        Log.d("TAG++", "File: ".plus(newImageFile.path))
                     })
+                    Log.d("TAG++", "Picasso: onBitmapLoaded")
                 }
             })
         }
@@ -99,7 +108,7 @@ class DownloadManager {
     }
 
     interface OnSaveFileListener {
-        fun onSave(uri: Uri)
+        fun onSave(path: String)
     }
 
     interface OnResponseFromPlay {

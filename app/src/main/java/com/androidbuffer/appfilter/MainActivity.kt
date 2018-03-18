@@ -41,10 +41,10 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
     }
 
     private fun manageStartOption() {
-        if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             openDefaultDialog()
         } else {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSION)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_CODE_PERMISSION)
         }
     }
 
@@ -138,13 +138,17 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
         DownloadManager.getImage(listOfItems.get(position).packageName, object : DownloadManager.OnResponseFromPlay {
             override fun onResponse(imageUrl: String?) {
                 Log.e("TAG++", ": Url = ${imageUrl}")
-                DownloadManager.saveImageToFolder(this@MainActivity, listOfItems[position].name, imageUrl, object : DownloadManager.OnSaveFileListener {
-                    override fun onSave(uri: Uri) {
-
-                    }
-                })
-                listOfItems.get(position).iconUrl = imageUrl
-                appAdapter?.notifyItemChanged(position)
+                if(imageUrl!=null) {
+                    DownloadManager.saveImageToFolder(this@MainActivity, listOfItems[position].name, imageUrl, object : DownloadManager.OnSaveFileListener {
+                        override fun onSave(uri: String) {
+                            listOfItems.get(position).iconUrl = imageUrl
+                            appAdapter?.notifyItemChanged(position)
+                        }
+                    })
+                }else{
+                    listOfItems.get(position).iconUrl = imageUrl
+                    appAdapter?.notifyItemChanged(position)
+                }
             }
         })
     }
