@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
     private lateinit var rvAppRequestList: RecyclerView
     private var listOfItems = ArrayList<AppModel>()
     private var appAdapter: AppRequestAdapter? = null
+    private var targetImage: Target? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,14 +139,15 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
         DownloadManager.getImage(listOfItems.get(position).packageName, object : DownloadManager.OnResponseFromPlay {
             override fun onResponse(imageUrl: String?) {
                 Log.e("TAG++", ": Url = ${imageUrl}")
-                if(imageUrl!=null) {
+                if (imageUrl != null) {
                     DownloadManager.saveImageToFolder(this@MainActivity, listOfItems[position].name, imageUrl, object : DownloadManager.OnSaveFileListener {
-                        override fun onSave(uri: String) {
+                        override fun onSave(uri: String, target: Target) {
                             listOfItems.get(position).iconUrl = imageUrl
                             appAdapter?.notifyItemChanged(position)
+                            targetImage = target
                         }
                     })
-                }else{
+                } else {
                     listOfItems.get(position).iconUrl = imageUrl
                     appAdapter?.notifyItemChanged(position)
                 }

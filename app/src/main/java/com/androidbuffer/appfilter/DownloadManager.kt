@@ -25,12 +25,6 @@ class DownloadManager {
 
     companion object {
 
-        fun getImage(packageName: String, listener: OnResponseFromPlay) {
-            val url = END_POINT.format(packageName)
-            Log.e("TAG++", url)
-            DownLoadAsync(listener).execute(url)
-        }
-
         fun saveImageToFolder(context: Context, name: String?, imageUrl: String?, listener: OnSaveFileListener) {
             Picasso.with(context).load(imageUrl).into(object : Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
@@ -55,12 +49,18 @@ class DownloadManager {
                         bitmap?.compress(Bitmap.CompressFormat.PNG, 100, outStream)
                         outStream.flush()
                         outStream.close()
-                        listener.onSave(newImageFile.path)
+                        listener.onSave(newImageFile.path, this)
                         Log.d("TAG++", "File: ".plus(newImageFile.path))
                     })
                     Log.d("TAG++", "Picasso: onBitmapLoaded")
                 }
             })
+        }
+
+        fun getImage(packageName: String, listener: OnResponseFromPlay) {
+            val url = END_POINT.format(packageName)
+            Log.e("TAG++", url)
+            DownLoadAsync(listener).execute(url)
         }
     }
 
@@ -70,6 +70,7 @@ class DownloadManager {
             try {
                 val url = URL(p0[0])
                 val urlConnection = url.openConnection() as HttpsURLConnection
+                urlConnection.connect()
                 val stream = BufferedInputStream(urlConnection.getInputStream())
                 val bufferRead = BufferedReader(InputStreamReader(stream))
                 val stringBuffer = StringBuffer()
@@ -94,6 +95,14 @@ class DownloadManager {
                             .replace(END_PATTERN, "")
                             .trim()
                     return URL_PROTOCOL + matchedResponse
+                } else {
+                    val secondPattern = Pattern.compile(PATTERN_SECOND_CODE)
+                    val secondMatcher = secondPattern.matcher(response)
+                    if (secondMatcher.find()) {
+                        return matcher.group().replace(PATTERN_SECOND_REPLACE, PATTERN_SECOND_REQUIRED_SIZE)
+                    } else {
+                        return null
+                    }
                 }
             } else {
                 return null
@@ -108,7 +117,7 @@ class DownloadManager {
     }
 
     interface OnSaveFileListener {
-        fun onSave(path: String)
+        fun onSave(path: String, target: Target)
     }
 
     interface OnResponseFromPlay {
