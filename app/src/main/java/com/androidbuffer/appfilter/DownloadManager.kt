@@ -22,11 +22,10 @@ import javax.net.ssl.HttpsURLConnection
  * Created by AndroidBuffer on 14/3/18.
  */
 class DownloadManager {
-
     companion object {
 
         fun saveImageToFolder(context: Context, name: String?, imageUrl: String?, listener: OnSaveFileListener) {
-            Picasso.with(context).load(imageUrl).into(object : Target {
+            val target  = object : Target{
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                     Log.d("TAG++", "Picasso: onPreparedLoad")
                 }
@@ -54,8 +53,11 @@ class DownloadManager {
                     })
                     Log.d("TAG++", "Picasso: onBitmapLoaded")
                 }
-            })
+            }
+            Picasso.with(context).load(imageUrl).into(target)
+
         }
+
 
         fun getImage(packageName: String, listener: OnResponseFromPlay) {
             val url = END_POINT.format(packageName)
@@ -70,7 +72,6 @@ class DownloadManager {
             try {
                 val url = URL(p0[0])
                 val urlConnection = url.openConnection() as HttpsURLConnection
-                urlConnection.connect()
                 val stream = BufferedInputStream(urlConnection.getInputStream())
                 val bufferRead = BufferedReader(InputStreamReader(stream))
                 val stringBuffer = StringBuffer()
@@ -79,6 +80,8 @@ class DownloadManager {
                 }
                 return getDownloadUrl(stringBuffer.toString())
             } catch (exp: UnknownHostException) {
+                Log.d("TAG++", ": Exception = ${exp.message}")
+            } catch (exp: FileNotFoundException) {
                 Log.d("TAG++", ": Exception = ${exp.message}")
             }
             return null
@@ -99,7 +102,11 @@ class DownloadManager {
                     val secondPattern = Pattern.compile(PATTERN_SECOND_CODE)
                     val secondMatcher = secondPattern.matcher(response)
                     if (secondMatcher.find()) {
-                        return matcher.group().replace(PATTERN_SECOND_REPLACE, PATTERN_SECOND_REQUIRED_SIZE)
+                        val urlPattern = Pattern.compile("https\\S.*=s100")
+                        val urlMatcher = urlPattern.matcher(secondMatcher.group(0))
+                        if (urlMatcher.find()) {
+                            return urlMatcher.group().replace(PATTERN_SECOND_REPLACE, PATTERN_SECOND_REQUIRED_SIZE)
+                        }
                     } else {
                         return null
                     }

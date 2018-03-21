@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.TextView
@@ -22,6 +23,9 @@ import android.widget.Toast
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
@@ -32,7 +36,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
     private lateinit var rvAppRequestList: RecyclerView
     private var listOfItems = ArrayList<AppModel>()
     private var appAdapter: AppRequestAdapter? = null
-    private var targetImage: Target? = null
+    private lateinit var toolbar : Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,9 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
         appAdapter = AppRequestAdapter(listOfItems, this)
         rvAppRequestList.layoutManager = LinearLayoutManager(this)
         rvAppRequestList.adapter = appAdapter
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(
+                toolbar)
     }
 
     private fun hasPermission(reaD_EXTERNAL_STORAGE: String): Boolean {
@@ -112,7 +119,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
             val parser = Xml.newPullParser()
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
             parser.setInput(`in`, null)
-            while (parser.next() != XmlPullParser.END_TAG) {
+            while (parser.next() != XmlPullParser.END_DOCUMENT) {
                 if (parser.eventType != XmlPullParser.START_TAG) {
                     continue
                 }
@@ -121,10 +128,14 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
                     val title = parser.getAttributeValue(null, "component")
                     val name = parser.getAttributeValue(null, "drawable")
                     if (title.contains("ComponentInfo")) {
-                        val packageName = title.substring(title.indexOf("{") + 1, title.indexOf("/"))
-                        val modelItem = AppModel(name, null, packageName)
-                        listOfItems.add(modelItem)
-                        Log.e("TAG++", ": PackageName = ${packageName}")
+                        try {
+                            val packageName = title.substring(title.indexOf("{") + 1, title.indexOf("/"))
+                            val modelItem = AppModel(name, null, packageName)
+                            listOfItems.add(modelItem)
+                            Log.e("TAG++", ": PackageName = ${packageName}")
+                        } catch (exp: StringIndexOutOfBoundsException) {
+                            exp.printStackTrace()
+                        }
                     }
                 }
                 parser.next()
@@ -144,7 +155,8 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
                         override fun onSave(uri: String, target: Target) {
                             listOfItems.get(position).iconUrl = imageUrl
                             appAdapter?.notifyItemChanged(position)
-                            targetImage = target
+                            //for strong reference to target
+                            toolbar.setTag(target)
                         }
                     })
                 } else {
@@ -153,5 +165,17 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
                 }
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+         menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId==R.id.appfilter){
+            chooseAppsFromAppFilter()
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
