@@ -25,7 +25,7 @@ class DownloadManager {
     companion object {
 
         fun saveImageToFolder(context: Context, name: String?, imageUrl: String?, listener: OnSaveFileListener) {
-            val target  = object : Target{
+            val target = object : Target {
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
                     Log.d("TAG++", "Picasso: onPreparedLoad")
                 }
@@ -89,28 +89,26 @@ class DownloadManager {
 
         fun getDownloadUrl(response: String?): String? {
             if (response != null) {
-                val patternMatcher = Pattern.compile(PATTERN_CODE)
+                val patternMatcher = Pattern.compile(PATTERN_THIRD)
                 val matcher = patternMatcher.matcher(response)
                 if (matcher.find()) {
-                    var matchedResponse = matcher.group()
-                    matchedResponse = matchedResponse.replace(START_INDEX_PATTERN, "")
-                            .replace(END_INDEX_PATTERN, REQUIRED_IMAGE_SIZE)
-                            .replace(END_PATTERN, "")
-                            .trim()
-                    return URL_PROTOCOL + matchedResponse
-                } else {
-                    val secondPattern = Pattern.compile(PATTERN_SECOND_CODE)
-                    val secondMatcher = secondPattern.matcher(response)
-                    if (secondMatcher.find()) {
-                        val urlPattern = Pattern.compile("https\\S.*=s100")
-                        val urlMatcher = urlPattern.matcher(secondMatcher.group(0))
-                        if (urlMatcher.find()) {
-                            return urlMatcher.group().replace(PATTERN_SECOND_REPLACE, PATTERN_SECOND_REQUIRED_SIZE)
+                    val response = matcher.group(0)
+                    val urlPattern = Pattern.compile(PATTERN_THIRD_URL)
+                    val urlMatcher = urlPattern.matcher(response)
+                    if (urlMatcher.find()) {
+                        val url = urlMatcher.group(0)
+                        var newUrl: StringBuffer? = null
+                        if (url.contains("=")) {
+                            newUrl = StringBuffer(url.substring(0, url.indexOf("=")))
+                            newUrl.append("=s512")
+                        } else if (url.contains(" ")) {
+                            newUrl = StringBuffer(url.substring(0, url.indexOf(" ")))
+                            newUrl.append("=s512")
                         }
-                    } else {
-                        return null
+                        return newUrl.toString();
                     }
                 }
+
             } else {
                 return null
             }

@@ -5,13 +5,5 @@ package com.androidbuffer.appfilter
  */
 
 const val END_POINT = "https://play.google.com/store/apps/details?id=%s"
-const val START_INDEX_PATTERN = "<img class=\"cover-image\" src=\"//"
-const val END_INDEX_PATTERN = "w300-rw\""
-const val REQUIRED_IMAGE_SIZE = "w512-rw"
-const val URL_PROTOCOL = "http://"
-const val END_PATTERN = "alt=\"Cover art\""
-const val PATTERN_CODE = "<img class=\\\"cover-image\\\" src=\\\"\\/\\/\\S.*rw\\\"\\salt=\\\"Cover\\sart\\\""
-const val PATTERN_SECOND_CODE = "\\<img\\saria-hidden=\\\"true\\\"\\ssrc=\\\".*\\Ss200\\\""
-const val PATTERN_SECOND_URL = "https:\\/\\/\\S.*=s100"
-const val PATTERN_SECOND_REQUIRED_SIZE = "s512"
-const val PATTERN_SECOND_REPLACE = "s100"
+const val PATTERN_THIRD = "<img\\s+(.*?)src=\\\"https:\\/\\/\\S.*?\\\"\\s+(.*?)alt=\\\"Cover art\\\"(.*?)>"
+const val PATTERN_THIRD_URL = "https:\\/\\/\\S.*?(=?)(\\S.*?)\"\\s"
