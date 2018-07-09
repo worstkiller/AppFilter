@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:focusedByDefault="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/viewBackground"
+        layout="@layout/main_background_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_16" />
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha=".9"
+            android:gravity="center_horizontal"
+            android:text="Home"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Header"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/containerDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/viewBackground"
+        android:background="@color/ColorPrimary50">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cvAddApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="4dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivAddAppIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="@drawable/ic_drawable_round"
+                    android:layout_margin="@dimen/padding_16"
+                    app:srcCompat="@drawable/ic_action_android" />
+
+                <TextView
+                    android:id="@+id/tvAddAppHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/ivAddAppIcon"
+                    android:paddingRight="@dimen/padding_16"
+                    android:paddingTop="@dimen/padding_16"
+                    android:text="@string/text_title_awesome_app"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Header"
+                    android:textColor="@color/textPrimary"
+                    android:textSize="@dimen/text_size_22" />
+
+                <TextView
+                    android:id="@+id/tvAddSubAppHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvAddAppHeader"
+                    android:layout_toRightOf="@+id/ivAddAppIcon"
+                    android:paddingBottom="@dimen/padding_16"
+                    android:paddingRight="@dimen/padding_16"
+                    android:text="com.android.google"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.PopupMenu.Small"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="@dimen/text_size_16" />
+
+                <EditText
+                    android:id="@+id/etAppName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvAddSubAppHeader"
+                    android:layout_margin="@dimen/padding_16"
+                    android:background="@drawable/edit_text_back"
+                    android:hint="@string/edit_app_name"
+                    android:inputType="text|textNoSuggestions"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etPackageName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/etAppName"
+                    android:layout_margin="@dimen/padding_16"
+                    android:background="@drawable/edit_text_back"
+                    android:hint="@string/edit_package_name"
+                    android:inputType="text|textNoSuggestions"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp"
+                    android:textSize="14sp" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:layout_below="@+id/etPackageName" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="normal"
+            app:layout_anchor="@id/cvAddApp"
+            app:layout_anchorGravity="center|bottom"
+            app:srcCompat="@drawable/ic_action_plus" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>
