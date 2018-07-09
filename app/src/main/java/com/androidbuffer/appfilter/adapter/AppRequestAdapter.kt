@@ -1,4 +1,4 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.androidbuffer.appfilter.model.AppModel
+import com.androidbuffer.appfilter.R
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 

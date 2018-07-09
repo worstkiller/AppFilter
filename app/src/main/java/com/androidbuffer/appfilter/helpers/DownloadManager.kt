@@ -1,15 +1,16 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.helpers
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Environment
 import android.os.Handler
-import android.os.PatternMatcher
 import android.util.Log
+import com.androidbuffer.appfilter.util.END_POINT
+import com.androidbuffer.appfilter.util.PATTERN_THIRD
+import com.androidbuffer.appfilter.util.PATTERN_THIRD_URL
+import com.androidbuffer.appfilter.R
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import java.io.*

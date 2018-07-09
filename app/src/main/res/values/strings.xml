@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">AppFilter</string>
     <string name="dialog_title">Tell us how would you like to proceed</string>
+    <string name="edit_app_name">Enter app name</string>
+    <string name="edit_package_name">Enter package name</string>
+    <string name="text_title_awesome_app">Your Awesome App</string>
 </resources>

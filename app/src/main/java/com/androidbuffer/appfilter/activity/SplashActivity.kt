@@ -1,9 +1,10 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import com.androidbuffer.appfilter.R
 
 /**
  * Created by AndroidBuffer on 12/3/18.

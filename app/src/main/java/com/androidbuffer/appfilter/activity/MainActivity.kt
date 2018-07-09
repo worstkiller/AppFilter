@@ -1,15 +1,11 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.activity
 
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
@@ -24,9 +20,11 @@ import java.io.InputStream
 import org.xmlpull.v1.XmlPullParser
 import android.util.Xml
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import com.squareup.picasso.Picasso
+import com.androidbuffer.appfilter.model.AppModel
+import com.androidbuffer.appfilter.helpers.DownloadManager
+import com.androidbuffer.appfilter.R
+import com.androidbuffer.appfilter.adapter.AppRequestAdapter
 import com.squareup.picasso.Target
 
 class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
@@ -173,7 +171,7 @@ class MainActivity : AppCompatActivity(), AppRequestAdapter.OnClickItem {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item?.itemId==R.id.appfilter){
+        if (item?.itemId== R.id.appfilter){
             chooseAppsFromAppFilter()
         }
         return super.onOptionsItemSelected(item)

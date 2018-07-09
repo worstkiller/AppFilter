@@ -1,4 +1,4 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.util
 
 /**
  * Created by AndroidBuffer on 14/3/18.

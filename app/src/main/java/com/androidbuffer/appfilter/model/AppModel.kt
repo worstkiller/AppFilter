@@ -1,4 +1,4 @@
-package com.androidbuffer.appfilter
+package com.androidbuffer.appfilter.model
 
 import com.squareup.picasso.Target
 

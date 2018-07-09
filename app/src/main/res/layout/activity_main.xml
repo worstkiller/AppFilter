@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/activity_back_ground"
     android:orientation="vertical"
-    tools:context="com.androidbuffer.appfilter.MainActivity">
+    tools:context="com.androidbuffer.appfilter.activity.MainActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -15,7 +15,7 @@
         android:background="@color/colorPrimary"
         android:elevation="8dp"
         app:title="@string/app_name"
-        app:titleTextColor="@color/colorFlowralWhite"
+        app:titleTextColor="@color/ColorPrimary50"
         android:minHeight="?actionBarSize" />
 
     <android.support.v7.widget.RecyclerView
