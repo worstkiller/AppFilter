@@ -4,4 +4,7 @@
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="margin_4">4dp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
 </resources>
